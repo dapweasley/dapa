@@ -3,17 +3,6 @@ import requests
 import math
 from periodictable import elements
 
-def get_element_description(symbol):
-    url = f"https://www.webelements.com/{symbol.lower()}/"
-    response = requests.get(url)
-    if response.status_code == 200:
-        start_index = response.text.find('<div class="summary">') + len('<div class="summary">')
-        end_index = response.text.find('</div>', start_index)
-        description = response.text[start_index:end_index]
-        return description.strip()
-    else:
-        return "Deskripsi tidak tersedia."
-
 def get_category(element):
     if element.number <= 92:
         return 'Logam'
@@ -42,11 +31,19 @@ def hitung_persen_rsd(SD, rata_rata):
 def page_about():
     st.title("Tentang Aplikasi Kimia")
     st.write("""
-    Aplikasi Kimia adalah aplikasi sederhana yang memungkinkan pengguna melakukan beberapa tugas kimia dasar. Aplikasi ini memungkinkan Anda:
+    Aplikasi kimia ini dapat :
     - Melihat informasi unsur dari tabel periodik.
     - Menghitung normalitas larutan.
     - Menghitung standar deviasi.
     - Menghitung persentase RSD.
+    
+             
+    PENYUSUN APLIKASI:
+    - Dhafa Aulia Rachman        (2360104)
+    - Hamna Nurfitria            (2360133)
+    - Marini Badlina             (2360167)
+    - Salsabila Aulia Widodo     (2360255)
+    - Shafira Yasmina Cahyanti   (2360260)
     
     
     Aplikasi ini dibangun menggunakan Streamlit dan Python.
@@ -63,8 +60,8 @@ def page_normalitas():
         st.write(f"Titrasi ke-{i+1}")
         bobot_ditimbang = st.number_input(f'Masukkan bobot yang ditimbang untuk Titrasi ke-{i+1} (mg)', min_value=0.0, key=f"bobot_{i}")
         faktor_pengali = st.number_input(f'Masukkan faktor pengali untuk Titrasi ke-{i+1}', min_value=0.0, key=f"faktor_{i}")
-        hasil_titrasi = st.number_input(f'Masukkan hasil titrasi untuk Titrasi ke-{i+1} (ml)', min_value=0.0, key=f"hasil_{i}")
-        BE_senyawa = st.number_input(f'Masukkan BE senyawa untuk Titrasi ke-{i+1}', min_value=0.0, key=f"BE_{i}")
+        hasil_titrasi = st.number_input(f'Masukkan hasil titrasi untuk Titrasi ke-{i+1} (ml)', min_value=0.00, key=f"hasil_{i}")
+        BE_senyawa = st.number_input(f'Masukkan BE senyawa untuk Titrasi ke-{i+1}', min_value=0.00, key=f"BE_{i}")
 
         if st.button(f'Hitung Titrasi ke-{i+1}'):
             if bobot_ditimbang == 0 or faktor_pengali == 0 or hasil_titrasi == 0 or BE_senyawa == 0:
@@ -87,7 +84,6 @@ def page_periodic_table():
 
     selected_element = elements.symbol(element_choice)
 
-    description = get_element_description(selected_element.symbol)
 
     with st.container():
         st.markdown(
@@ -100,7 +96,6 @@ def page_periodic_table():
                     <p><strong>Kategori:</strong> {get_category(selected_element)}</p>
                     <p><strong>Kepadatan:</strong> {selected_element.density if hasattr(selected_element, 'density') else 'Tidak Tersedia'}</p>
                     <p><strong>Jumlah Isotop:</strong> {len(selected_element.isotopes)}</p>
-                    <p><strong>Deskripsi:</strong> {description}</p>
                 </div>
             </div>
             """,
@@ -109,8 +104,8 @@ def page_periodic_table():
 
 def page_rsd():
     st.title('Kalkulator Persentase RSD')
-    SD = st.number_input('Masukkan jumlah SD', min_value=0.0)
-    rata_rata = st.number_input('Masukkan rata rata konsentrasi (N)', min_value=0.1)
+    SD = st.number_input('Masukkan jumlah SD', min_value=0.00)
+    rata_rata = st.number_input('Masukkan rata rata konsentrasi (N)', min_value=0.01)
 
     if st.button('Hitung'):
         rsd = hitung_persen_rsd(SD, rata_rata)
