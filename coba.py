@@ -4,22 +4,18 @@ import math
 from periodictable import elements
 import periodictable
 
-def get_category(element):
-    if element.number <= 92:
-        return 'Logam'
-    else:
-        return 'Non-logam'
-
 def hitung_normalitas(bobot_ditimbang, faktor_pengali, hasil_titrasi, BE_senyawa):
     normalitas = (bobot_ditimbang) / (faktor_pengali * hasil_titrasi * BE_senyawa)
     return normalitas
 
 def hitung_rata_rata(normalitas_list):
-    if len(normalitas_list) == 0:
-        return None
-    else:
-        rata_rata = sum(normalitas_list) / len(normalitas_list)
-        return rata_rata
+    rata_rata = sum(normalitas_list) / len(normalitas_list)
+    return rata_rata
+
+def hitung_std_dev(normalitas_list, rata_rata):
+    variansi = sum((x - rata_rata) ** 2 for x in normalitas_list) / len(normalitas_list)
+    std_dev = variansi ** 0.5  # Menggunakan akar kuadrat langsung
+    return std_dev
 
 def hitung_persen_rsd(SD, rata_rata):
     if rata_rata == 0:
@@ -50,38 +46,85 @@ def page_about():
     Aplikasi ini dibangun menggunakan Streamlit dan Python.
     """)
 
-def page_normalitas_dan_molaritas():
+def page_normalitas():
     st.title('KALKULATOR PERHITUNGAN NORMALITAS DAN MOLARITAS:male-technologist:')
-    st.write('Gunakan kalkulator ini untuk menghitung normalitas dasn molaritas larutan.')
+    st.write('Gunakan kalkulator ini untuk menghitung normalitas larutan.')
     st.write('''
             - Normalitas (N), atau dikenal sebagai konsentrasi normal, adalah ukuran konsentrasi zat terlarut dalam gram ekuivalen per volume larutan .
             Untuk larutan dengan 'x' gram zat terlarut, persamaan normalitasnya adalah:
-            (𝑁=Massa zat terlarut/berat ekuivalen × volume titran)
-            - molaritas (M) adalah jumlah mol zat per volume larutan, sedangkan normalitas adalah berat ekuivalen zat per liter larutan.
-            (M= Massa zat terlarut/BM x Volume titran)''')
+            (𝑁=Massa zat terlarut/berat ekuivalen × volume titran)''')
     st.write('Sekarang Anda tahu apa itu normalitas! Mari kita hitung normalitas 🤗')
 
+    if 'normalitas_list' not in st.session_state:
+        st.session_state.normalitas_list = []
+
     jumlah_titrasi = st.number_input('Masukkan jumlah titrasi', min_value=1, value=1)
-    normalitas_list = []
-    
+
     for i in range(jumlah_titrasi):
         st.write(f"Titrasi ke-{i+1}")
         bobot_ditimbang = st.number_input(f'Masukkan bobot yang ditimbang untuk Titrasi ke-{i+1} (mg)', min_value=0.0, key=f"bobot_{i}")
         faktor_pengali = st.number_input(f'Masukkan faktor pengali untuk Titrasi ke-{i+1}', min_value=0.0, key=f"faktor_{i}")
-        hasil_titrasi = st.number_input(f'Masukkan hasil titrasi untuk Titrasi ke-{i+1} (ml)', min_value=0.00, key=f"hasil_{i}")
-        BE_senyawa = st.number_input(f'Masukkan BE/BM senyawa untuk Titrasi ke-{i+1}', min_value=0.00, key=f"BE_{i}")
+        hasil_titrasi = st.number_input(f'Masukkan hasil titrasi untuk Titrasi ke-{i+1} (ml)', min_value=0.0, key=f"hasil_{i}")
+        BE_senyawa = st.number_input(f'Masukkan BE senyawa untuk Titrasi ke-{i+1}', min_value=0.0, key=f"BE_{i}")
 
         if st.button(f'Hitung Titrasi ke-{i+1}'):
-            if bobot_ditimbang == 0 or faktor_pengali == 0 or hasil_titrasi == 0 or BE_senyawa == 0:
-                st.error("Input semua data.")
-            else:
-                normalitas = hitung_normalitas(bobot_ditimbang, faktor_pengali, hasil_titrasi, BE_senyawa)
-                normalitas_list.append(normalitas)
-                st.write(f'Normalitas untuk Titrasi ke-{i+1} = {normalitas:.4f} N')
+            normalitas = hitung_normalitas(bobot_ditimbang, faktor_pengali, hasil_titrasi, BE_senyawa)
+            st.session_state.normalitas_list.append(normalitas)
+            st.write(f'Normalitas untuk Titrasi ke-{i+1} = {normalitas:.4f} N')
 
-    if len(normalitas_list) > 0:
-        rata_rata_normalitas = hitung_rata_rata(normalitas_list)
+    if st.session_state.normalitas_list:
+        rata_rata_normalitas = hitung_rata_rata(st.session_state.normalitas_list)
+        std_dev_normalitas = hitung_std_dev(st.session_state.normalitas_list, rata_rata_normalitas)
+
+        st.write('Hasil normalitas untuk semua titrasi:')
+        for i, normalitas in enumerate(st.session_state.normalitas_list, start=1):
+            st.write(f'Titrasi ke-{i}: {normalitas:.4f} N')
+
         st.write(f'Hasil rata-rata normalitas dari semua titrasi = {rata_rata_normalitas:.4f} N')
+        st.write(f'Standar deviasi normalitas dari semua titrasi = {std_dev_normalitas:.4f} N')
+
+if __name__ == '__page_normalitas__':
+    page_normalitas()
+
+def page_molaritas():
+    st.title('KALKULATOR PERHITUNGAN NORMALITAS DAN MOLARITAS:male-technologist:')
+    st.write('Gunakan kalkulator ini untuk menghitung normalitas larutan.')
+    st.write('''
+            - Normalitas (N), atau dikenal sebagai konsentrasi normal, adalah ukuran konsentrasi zat terlarut dalam gram ekuivalen per volume larutan .
+            Untuk larutan dengan 'x' gram zat terlarut, persamaan normalitasnya adalah:
+            (𝑁=Massa zat terlarut/berat ekuivalen × volume titran)''')
+    st.write('Sekarang Anda tahu apa itu normalitas! Mari kita hitung normalitas 🤗')
+
+    if 'normalitas_list' not in st.session_state:
+        st.session_state.normalitas_list = []
+
+    jumlah_titrasi = st.number_input('Masukkan jumlah titrasi', min_value=1, value=1)
+
+    for i in range(jumlah_titrasi):
+        st.write(f"Titrasi ke-{i+1}")
+        bobot_ditimbang = st.number_input(f'Masukkan bobot yang ditimbang untuk Titrasi ke-{i+1} (mg)', min_value=0.0, key=f"bobot_{i}")
+        faktor_pengali = st.number_input(f'Masukkan faktor pengali untuk Titrasi ke-{i+1}', min_value=0.0, key=f"faktor_{i}")
+        hasil_titrasi = st.number_input(f'Masukkan hasil titrasi untuk Titrasi ke-{i+1} (ml)', min_value=0.0, key=f"hasil_{i}")
+        BE_senyawa = st.number_input(f'Masukkan BM senyawa untuk Titrasi ke-{i+1}', min_value=0.0, key=f"BE_{i}")
+
+        if st.button(f'Hitung Titrasi ke-{i+1}'):
+            normalitas = hitung_normalitas(bobot_ditimbang, faktor_pengali, hasil_titrasi, BE_senyawa)
+            st.session_state.normalitas_list.append(normalitas)
+            st.write(f'Normalitas untuk Titrasi ke-{i+1} = {normalitas:.4f} M')
+
+    if st.session_state.normalitas_list:
+        rata_rata_normalitas = hitung_rata_rata(st.session_state.normalitas_list)
+        std_dev_normalitas = hitung_std_dev(st.session_state.normalitas_list, rata_rata_normalitas)
+
+        st.write('Hasil normalitas untuk semua titrasi:')
+        for i, normalitas in enumerate(st.session_state.normalitas_list, start=1):
+            st.write(f'Titrasi ke-{i}: {normalitas:.4f} M')
+
+        st.write(f'Hasil rata-rata normalitas dari semua titrasi = {rata_rata_normalitas:.4f} M')
+        st.write(f'Standar deviasi normalitas dari semua titrasi = {std_dev_normalitas:.4f} M')
+
+if __name__ == '__page_molaritas__':
+    page_molaritas()
 
 def page_unsur():
     st.title("⚗️INFORMASI UNSUR:sparkles:")
@@ -142,57 +185,25 @@ def page_rsd():
             Fungsi %RSD populer di kalangan non-ahli statistik karena interpretasinya
             didasarkan pada hasil persen dan bukan nilai abstrak. Kegunaan utama %RSD adalah dalam kimia 
             analitik dan secara rutin digunakan untuk menilai variasi kumpulan data.''')
-    SD = st.number_input('Masukkan jumlah SD', min_value=0.00)
-    rata_rata = st.number_input('Masukkan rata rata konsentrasi (N)', min_value=0.01)
+    SD = st.number_input('Masukkan jumlah SD', min_value=0.0000, step=0.0001)
+    rata_rata = st.number_input('Masukkan rata rata konsentrasi (N)', min_value=0.0001, step=0.0001)
 
     if st.button('Hitung'):
         rsd = hitung_persen_rsd(SD, rata_rata)
         if rsd is not None:
-            st.write(f'RSD = {rsd:.2f}%')
-
-def page_standar_deviasi():
-    st.title("KALKULATOR PERHITUNGAN STANDAR DEVIASI")
-    st.write('''Untuk menggunakan kalkulator ini, pengguna hanya memasukkan kumpulan angka yang ingin mereka hitung deviasi standarnya, 
-             dengan setiap angka dipisahkan oleh titik. Titik harus digunakan untuk memisahkan nilai, 
-             atau kalkulator tidak akan berfungsi. Pembatas lain, termasuk spasi di antara angka, 
-             akan menyebabkan kalkulator tidak berfungsi. Hanya titik yang dikenali untuk memisahkan nilai.''')
-    st.write('mari kita hitung standar deviasi')
-    data_input = []
-    num_columns = st.number_input("Jumlah Kolom Input Data", min_value=3, max_value=10, value=3)
-
-    for i in range(num_columns):
-        input_data = st.text_input(f"Masukkan data kolom {i+1}")
-        if input_data:
-            data_input.append([float(x.strip()) for x in input_data.split(',') if x.strip()])
-
-    merged_data = [item for sublist in data_input for item in sublist]
-
-    if merged_data:
-        hasil_standar_deviasi = page_standar_deviasi_calc(merged_data)
-        st.write("Standar Deviasi:", hasil_standar_deviasi)
-    else:
-        st.error("Input semua data.")
-
-def page_standar_deviasi_calc(data):
-    try:
-        rata_rata = sum(data) / len(data)
-        selisih_kuadrat = sum((x - rata_rata) ** 2 for x in data)
-        standar_deviasi = math.sqrt((selisih_kuadrat) / (len(data) - 1))
-        return standar_deviasi
-    except:
-        return "Masukkan semua hasil konsentrasi"
+            st.write(f'RSD = {rsd:.4f}%')
 
 def main():
-    page = st.sidebar.radio("Pilih Halaman", ["Tentang Aplikasi", "Informasi Unsur", "Kalkulator Konsentrasi", "Kalkulator Standar Deviasi", "Kalkulator Persentase RSD"])
+    page = st.sidebar.radio("Pilih Halaman", ["Tentang Aplikasi", "Informasi Unsur", "Kalkulator Normalitas", "kalkulator Molaritas", "Kalkulator Persentase RSD"])
 
     if page == "Tentang Aplikasi":
         page_about()
     elif page == "Informasi Unsur":
         page_unsur()
-    elif page == "Kalkulator Konsentrasi":
-        page_normalitas_dan_molaritas()
-    elif page == "Kalkulator Standar Deviasi":
-        page_standar_deviasi()
+    elif page == "Kalkulator Normalitas":
+        page_normalitas()
+    elif page == "kalkulator Molaritas":
+        page_molaritas()
     elif page == "Kalkulator Persentase RSD":
         page_rsd()
 
