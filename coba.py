@@ -90,9 +90,8 @@ def page_molaritas():
     st.title('KALKULATOR PERHITUNGAN NORMALITAS DAN MOLARITAS:male-technologist:')
     st.write('Gunakan kalkulator ini untuk menghitung normalitas larutan.')
     st.write('''
-            - Normalitas (N), atau dikenal sebagai konsentrasi normal, adalah ukuran konsentrasi zat terlarut dalam gram ekuivalen per volume larutan .
-            Untuk larutan dengan 'x' gram zat terlarut, persamaan normalitasnya adalah:
-            (𝑁=Massa zat terlarut/berat ekuivalen × volume titran)''')
+            - molaritas adalah jumlah mol zat per volume larutan, sedangkan normalitas adalah berat ekuivalen zat per liter larutan. 
+              persamaan moralitas adalah: (M= Massa zat terlarut/BM x Volume titran)''')
     st.write('Sekarang Anda tahu apa itu normalitas! Mari kita hitung normalitas 🤗')
 
     if 'normalitas_list' not in st.session_state:
@@ -185,8 +184,8 @@ def page_rsd():
             Fungsi %RSD populer di kalangan non-ahli statistik karena interpretasinya
             didasarkan pada hasil persen dan bukan nilai abstrak. Kegunaan utama %RSD adalah dalam kimia 
             analitik dan secara rutin digunakan untuk menilai variasi kumpulan data.''')
-    SD = st.number_input('Masukkan jumlah SD', min_value=0.0000, step=0.0001)
-    rata_rata = st.number_input('Masukkan rata rata konsentrasi (N)', min_value=0.0001, step=0.0001)
+    SD = st.number_input('Masukkan jumlah SD', min_value=0.0000, format = "%.4f")
+    rata_rata = st.number_input('Masukkan rata rata konsentrasi (N)', min_value=0.0000, format = "%.4f")
 
     if st.button('Hitung'):
         rsd = hitung_persen_rsd(SD, rata_rata)
@@ -194,8 +193,8 @@ def page_rsd():
             st.write(f'RSD = {rsd:.4f}%')
 
 def main():
+    st.markdown("""<style>body {background-color: #ADD8E6}</style>""",unsafe_allow_html=True)
     page = st.sidebar.radio("Pilih Halaman", ["Tentang Aplikasi", "Informasi Unsur", "Kalkulator Normalitas", "kalkulator Molaritas", "Kalkulator Persentase RSD"])
-
     if page == "Tentang Aplikasi":
         page_about()
     elif page == "Informasi Unsur":
@@ -206,6 +205,8 @@ def main():
         page_molaritas()
     elif page == "Kalkulator Persentase RSD":
         page_rsd()
+if __name__ == '__main__':
+    main()
 
 if __name__ == '__main__':
     main()
