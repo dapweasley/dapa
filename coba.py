@@ -5,16 +5,21 @@ from periodictable import elements
 import periodictable
 def add_css():
     st.markdown(
-        """
+        f"""
         <style>
-        .stApp {
-            background-color: url("https://img.freepik.com/free-vector/retro-science-background_23-2148557500.jpg")
-        }
+        .stApp {{
+            background: url("https://img.freepik.com/free-vector/retro-science-background_23-2148557500.jpg");
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center;
+            color: black;
+        }}
         </style>
         """,
         unsafe_allow_html=True
     )
-
+     
 def hitung_normalitas(bobot_ditimbang, faktor_pengali, hasil_titrasi, BE_senyawa):
     normalitas = (bobot_ditimbang) / (faktor_pengali * hasil_titrasi * BE_senyawa)
     return normalitas
