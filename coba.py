@@ -4,6 +4,19 @@ import math
 from periodictable import elements
 import periodictable
 
+def add_background():
+    st.markdown(
+        """
+        <style>
+        .stApp {
+            background: url(https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.istockphoto.com%2Fillustrations%2Fchemistry-background&psig=AOvVaw1y_o1uTdpFLLJv05FdRuto&ust=1716566951860000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCJiu6a2UpIYDFQAAAAAdAAAAABAE)
+            background-size: cover;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+
 def hitung_normalitas(bobot_ditimbang, faktor_pengali, hasil_titrasi, BE_senyawa):
     normalitas = (bobot_ditimbang) / (faktor_pengali * hasil_titrasi * BE_senyawa)
     return normalitas
@@ -26,6 +39,7 @@ def hitung_persen_rsd(SD, rata_rata):
         return rsd
 
 def page_about():
+    add_background()
     st.title("🧪Tentang Aplikasi Kimia:male-scientist:")
     st.write("""
     Aplikasi kimia ini dapat :
@@ -47,6 +61,7 @@ def page_about():
     """)
 
 def page_normalitas():
+    add_background()
     st.title('KALKULATOR PERHITUNGAN NORMALITAS DAN MOLARITAS:male-technologist:')
     st.write('Gunakan kalkulator ini untuk menghitung normalitas larutan.')
     st.write('''
@@ -87,12 +102,13 @@ if __name__ == '__page_normalitas__':
     page_normalitas()
 
 def page_molaritas():
+    add_background()
     st.title('KALKULATOR PERHITUNGAN NORMALITAS DAN MOLARITAS:male-technologist:')
     st.write('Gunakan kalkulator ini untuk menghitung normalitas larutan.')
     st.write('''
             - molaritas adalah jumlah mol zat per volume larutan, sedangkan normalitas adalah berat ekuivalen zat per liter larutan. 
               persamaan moralitas adalah: (M= Massa zat terlarut/BM x Volume titran)''')
-    st.write('Sekarang Anda tahu apa itu normalitas! Mari kita hitung normalitas 🤗')
+    st.write('Sekarang Anda tahu apa itu Molaritas! Mari kita hitung Molaritas 🤗')
 
     if 'normalitas_list' not in st.session_state:
         st.session_state.normalitas_list = []
@@ -126,6 +142,7 @@ if __name__ == '__page_molaritas__':
     page_molaritas()
 
 def page_unsur():
+    add_background()
     st.title("⚗️INFORMASI UNSUR:sparkles:")
     st.write('''
              Unsur kimia bisa berarti dua hal:
@@ -193,7 +210,6 @@ def page_rsd():
             st.write(f'RSD = {rsd:.4f}%')
 
 def main():
-    st.markdown("""<style>body {background-color: #ADD8E6}</style>""",unsafe_allow_html=True)
     page = st.sidebar.radio("Pilih Halaman", ["Tentang Aplikasi", "Informasi Unsur", "Kalkulator Normalitas", "kalkulator Molaritas", "Kalkulator Persentase RSD"])
     if page == "Tentang Aplikasi":
         page_about()
