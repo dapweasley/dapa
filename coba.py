@@ -8,7 +8,7 @@ def add_css():
         """
         <style>
         .stApp {
-            background-color: url("https://img.freepik.com/free-vector/retro-science-background_23-2148557500.jpg?w=1380&t=st=1716482515~exp=1716483115~hmac=6e4d3ff0f743457ade5eec791f589dbb43f8346f46ef20cd1733dc0abfc9fa1d")
+            background-color: url("https://img.freepik.com/free-vector/retro-science-background_23-2148557500.jpg")
         }
         </style>
         """,
