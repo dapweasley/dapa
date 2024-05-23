@@ -3,14 +3,12 @@ import requests
 import math
 from periodictable import elements
 import periodictable
-
-def add_background():
+def add_css():
     st.markdown(
         """
         <style>
         .stApp {
-            background: url(https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.istockphoto.com%2Fillustrations%2Fchemistry-background&psig=AOvVaw1y_o1uTdpFLLJv05FdRuto&ust=1716566951860000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCJiu6a2UpIYDFQAAAAAdAAAAABAE)
-            background-size: cover;
+            background-color: url("https://img.freepik.com/free-vector/retro-science-background_23-2148557500.jpg?w=1380&t=st=1716482515~exp=1716483115~hmac=6e4d3ff0f743457ade5eec791f589dbb43f8346f46ef20cd1733dc0abfc9fa1d")
         }
         </style>
         """,
@@ -39,7 +37,6 @@ def hitung_persen_rsd(SD, rata_rata):
         return rsd
 
 def page_about():
-    add_background()
     st.title("🧪Tentang Aplikasi Kimia:male-scientist:")
     st.write("""
     Aplikasi kimia ini dapat :
@@ -61,7 +58,6 @@ def page_about():
     """)
 
 def page_normalitas():
-    add_background()
     st.title('KALKULATOR PERHITUNGAN NORMALITAS DAN MOLARITAS:male-technologist:')
     st.write('Gunakan kalkulator ini untuk menghitung normalitas larutan.')
     st.write('''
@@ -102,7 +98,6 @@ if __name__ == '__page_normalitas__':
     page_normalitas()
 
 def page_molaritas():
-    add_background()
     st.title('KALKULATOR PERHITUNGAN NORMALITAS DAN MOLARITAS:male-technologist:')
     st.write('Gunakan kalkulator ini untuk menghitung normalitas larutan.')
     st.write('''
@@ -142,7 +137,6 @@ if __name__ == '__page_molaritas__':
     page_molaritas()
 
 def page_unsur():
-    add_background()
     st.title("⚗️INFORMASI UNSUR:sparkles:")
     st.write('''
              Unsur kimia bisa berarti dua hal:
@@ -210,6 +204,7 @@ def page_rsd():
             st.write(f'RSD = {rsd:.4f}%')
 
 def main():
+    add_css()
     page = st.sidebar.radio("Pilih Halaman", ["Tentang Aplikasi", "Informasi Unsur", "Kalkulator Normalitas", "kalkulator Molaritas", "Kalkulator Persentase RSD"])
     if page == "Tentang Aplikasi":
         page_about()
