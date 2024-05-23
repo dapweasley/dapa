@@ -8,12 +8,11 @@ def add_css():
         f"""
         <style>
         .stApp {{
-            background: url("https://img.freepik.com/free-vector/retro-science-background_23-2148557500.jpg");
+            background: url("https://static.vecteezy.com/system/resources/previews/006/852/804/non_2x/abstract-blue-background-simple-design-for-your-website-free-vector.jpg");
             background-size: cover;
             background-repeat: no-repeat;
             background-attachment: fixed;
             background-position: center;
-            color: black;
         }}
         </style>
         """,
