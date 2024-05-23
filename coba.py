@@ -207,6 +207,3 @@ def main():
         page_rsd()
 if __name__ == '__main__':
     main()
-
-if __name__ == '__main__':
-    main()
